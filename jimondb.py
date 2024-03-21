@@ -80,15 +80,11 @@ def get_last_update():
     return dt
 
 
-def visualize():
-    get_last_update()
-
-
 def close():
     _db.close()
 
 
 if __name__ == "__main__":
     connect()
-    visualize()
+    get_last_update()
     close()
