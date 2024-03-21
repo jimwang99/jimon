@@ -18,4 +18,4 @@ client:
 
 .PHONY: env
 env:
-	pip install loguru grpcio grpcio-tools peewee
+	pip install loguru psutil grpcio grpcio-tools peewee fire
