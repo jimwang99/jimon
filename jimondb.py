@@ -40,7 +40,7 @@ def insert(
             mem_usage=mem_usage,
         )
         logger.debug(
-            f"{update_type=} {hostname=} {timestamp=} {temp=} {cpu_usage=} {mem_usage=}"
+            f"{update_type=} {hostname=} {timestamp=} {temp=:.2f} {cpu_usage=:.2f} {mem_usage=:.2f}"
         )
 
 
@@ -51,8 +51,29 @@ def query_all():
 def debug():
     for update in query_all():
         logger.debug(
-            f"{update.update_type=} {update.hostname=} {update.timestamp=} {update.temp=} {update.cpu_usage=} {update.mem_usage=}"
+            f"{update.update_type=} {update.hostname=} {update.timestamp=} {update.temp=:.2f} {update.cpu_usage=:.2f} {update.mem_usage=:.2f}"
         )
+
+def get_last_update():
+    dt = {}
+    for update in query_all():
+        try:
+            _update = dt[update.hostname]
+            if _update.timestamp < update.timestamp:
+                dt[update.hostname] = update
+        except KeyError:
+            dt[update.hostname] = update
+    
+    for update in dt.values():
+        logger.info(
+            f"hostname={update.hostname} timestamp={update.timestamp} temp={update.temp:.2f} cpu_usage={update.cpu_usage:.2f} mem_usage={update.mem_usage:.2f}"
+        )
+    
+    return dt
+
+
+def visualize():
+    get_last_update()
 
 
 def close():
@@ -61,5 +82,5 @@ def close():
 
 if __name__ == "__main__":
     connect()
-    debug()
+    visualize()
     close()
