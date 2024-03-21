@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package jimon;
+
+service Jimon {
+    rpc UpdateAndAck (MsgUpdate) returns (MsgAck) {}
+}
+
+message MsgUpdate {
+    int32 update_type = 1;
+    string hostname = 2;
+    int64 timestamp = 3;
+    float temp = 4;
+    float cpu_usage = 5;
+    float mem_usage = 6;
+}
+
+message MsgAck {
+    int32 errno = 1;
+}
