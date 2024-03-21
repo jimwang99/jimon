@@ -1,3 +1,4 @@
+from datetime import datetime
 from peewee import *
 
 from loguru import logger
@@ -54,6 +55,12 @@ def debug():
             f"{update.update_type=} {update.hostname=} {update.timestamp=} {update.temp=:.2f} {update.cpu_usage=:.2f} {update.mem_usage=:.2f}"
         )
 
+def _timestamp_int_to_str(n: int) -> str:
+    o = datetime.fromtimestamp(int(n))
+    s = o.strftime("%Y-%m-%d %H:%M:%S")
+    return s
+
+
 def get_last_update():
     dt = {}
     for update in query_all():
@@ -65,8 +72,9 @@ def get_last_update():
             dt[update.hostname] = update
     
     for update in dt.values():
+        s_timestamp = _timestamp_int_to_str(update.timestamp)
         logger.info(
-            f"hostname={update.hostname} timestamp={update.timestamp} temp={update.temp:.2f} cpu_usage={update.cpu_usage:.2f} mem_usage={update.mem_usage:.2f}"
+            f"{s_timestamp} hostname={update.hostname} timestamp={update.timestamp} temp={update.temp:.2f} cpu_usage={update.cpu_usage:.2f} mem_usage={update.mem_usage:.2f}"
         )
     
     return dt
