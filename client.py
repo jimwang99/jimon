@@ -70,7 +70,7 @@ class Client:
                     mem_usage=self._get_mem_usage(),
                 )
                 logger.debug(
-                    f"MsgUpdate: type={msg_update.update_type} name={msg_update.hostname} time={msg_update.timestamp} temp={msg_update.temp} cpu_usage={msg_update.cpu_usage} mem_usage={msg_update.mem_usage}"
+                    f"MsgUpdate: type={msg_update.update_type} name={msg_update.hostname} time={msg_update.timestamp} temp={msg_update.temp:.2f} cpu_usage={msg_update.cpu_usage:.2f} mem_usage={msg_update.mem_usage:.2f}"
                 )
 
                 msg_ack = stub.UpdateAndAck(msg_update)
@@ -113,7 +113,11 @@ class Client:
     def __repr__(self):
         return f"Status: {self.hostname=} {self.server_ip=} {self.server_port=}"
 
+def main(interval: int = 0, is_test: bool = False):
+    client = Client()
+    client.run(interval=interval, is_test=is_test)
+
 
 if __name__ == "__main__":
-    client = Client()
-    client.run(is_test=True)
+    import fire
+    fire.Fire(main)

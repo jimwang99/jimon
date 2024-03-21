@@ -14,7 +14,7 @@ from loguru import logger
 class Servicer(jimon_pb2_grpc.JimonServicer):
     def UpdateAndAck(self, msg_update, context) -> jimon_pb2.MsgAck:
         logger.debug(
-            f"MsgUpdate: type={msg_update.update_type} name={msg_update.hostname} time={msg_update.timestamp} temp={msg_update.temp} cpu_usage={msg_update.cpu_usage} mem_usage={msg_update.mem_usage}"
+            f"MsgUpdate: type={msg_update.update_type} name={msg_update.hostname} time={msg_update.timestamp} temp={msg_update.temp:.2f} cpu_usage={msg_update.cpu_usage:.2f} mem_usage={msg_update.mem_usage:.2f}"
         )
         jimondb.insert(
             msg_update.update_type,
